@@ -18,13 +18,11 @@ Run a Docker container and start an interactive bash session, while mounting the
 $ make run-bash
 ```
 
-##
-Paper plots
+## Paper plots
 
 To generate the figures of the paper, refer to the notebook LLM_bias_plots.ipynb
 
-##
-Doubly Robust estimation
+## Doubly Robust estimation of ATE
 
 The boostrapped estimations of ATE from the doubly robust method can be optained running doubly_robust.py in the srs folder.
 
