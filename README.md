@@ -20,7 +20,7 @@ $ make run-bash
 
 ## Paper plots
 
-To generate the figures of the paper, refer to the notebook LLM_bias_plots.ipynb
+To generate the figures of the paper, refer to the notebook LLM_bias_plots.ipynb.
 
 ## Doubly Robust estimation of ATE
 
