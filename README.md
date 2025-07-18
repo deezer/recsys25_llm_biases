@@ -1,6 +1,6 @@
 # Biases in LLM-Generated Musical Taste Profiles for Recommendation
 
-This repository provides our Python code to reproduce the experiments from the paper Evaluating Biases in LLM-Generated Musical Taste Profiles for Recommendation. The paper was submitted to ACM recsys 2025.
+This repository provides our Python code to reproduce the experiments from the paper "Biases in LLM-Generated Musical Taste Profiles for Recommendation". Accepted to ACM recsys 2025.
 
 ## Abstract
 
