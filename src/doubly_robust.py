@@ -46,9 +46,6 @@ df.reset_index(inplace = True, drop = True)
 
 df.rename(columns=lambda x: x.replace("_ratio", "") if "_ratio" in x else x, inplace=True)
 
-#add the mean age for the outlier
-df.loc[df.age <18, 'age'] = 33
-
 #get long term consumption for covariates 
 df_prop = pd.read_csv('../../../data/nfs/analysis/bmassonisguerra/rec_llm/propensity.csv')
 df_prop = df_prop[['user_id','Electronic_ratio', 'Metal_ratio', 'Rock_ratio', 'Jazz_ratio','World_ratio','Rap_ratio']].copy()
