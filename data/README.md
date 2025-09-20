@@ -1,4 +1,4 @@
-## Dataset description for the downstream recommendation task
+## Dataset description (downstream recommendation task)
 
 The training data includes three mandatory files, but more will be generated automatically in the training pipeline:
 
