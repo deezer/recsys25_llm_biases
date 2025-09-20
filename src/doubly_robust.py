@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 
 #get the data and preprocess
-df = pd.read_csv('data.csv')
+df = pd.read_csv('user_data.csv')
 #get the long term preferences
 df_prop = pd.read_csv('long_term.csv')
 
