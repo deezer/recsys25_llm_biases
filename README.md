@@ -14,8 +14,8 @@ Please cite our paper if you use this code in your own work:
 ```
 ## Dataset
 The `data` folder contains the following files:  
-- **`user_data.csv`**: user profiles and ratings  
-- **`long_term.csv`**: long-term preferences, used for computing the ATE with Doubly Robust  
+- **`user_data.csv`**: user profiles and ratings.  
+- **`long_term.csv`**: long-term preferences, used for computing the ATE with Doubly Robust.  
 
 ## Quickstart
 
