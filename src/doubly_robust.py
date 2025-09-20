@@ -7,59 +7,20 @@ from tqdm import tqdm
 
 
 #get the data and preprocess
-df = pd.read_csv('../../../data/ceph/analysis/bmassonisguerra/rec_llm/rating_cleaned.csv')
-user = pd.read_csv('../../../data/ceph/analysis/bmassonisguerra/rec_llm/user_info.csv')
-user_stream = pd.read_csv('../../../data/ceph/analysis/bmassonisguerra/rec_llm/user_stream_data.csv')
-age_gender = pd.read_csv('../../../data/ceph/analysis/bmassonisguerra/rec_llm/gender-age.csv')
+df = pd.read_csv('data.csv')
+#get the long term preferences
+df_prop = pd.read_csv('long_term.csv')
 
-df = df[df['rating'].notna()]
-
-temp = df[df.is_own_profile == False].groupby('user_id')['model'].count().reset_index(name = 'n')
-users_remove = temp[temp.n !=5].user_id.values
-
-df = df[~(df.user_id.isin(users_remove))]
-
-temp = df[df.is_own_profile == True].groupby('user_id')['rating'].count().reset_index(name = 'n')
-users_keep = temp[temp.n == 12].user_id.values
-
-df = df[df.user_id.isin(users_keep)]
-
-temp = df[df.is_own_profile == False].groupby('user_id')['rating'].median().reset_index(name = 'baseline')
-df = df.merge(temp, on = 'user_id')
-df['delta_rating'] = df['rating'] - df['baseline']
-
-df = df[df.is_own_profile == True].copy()
-
-df = df.merge(age_gender, on = 'user_id', how = 'left')
-df = df.merge(user, on = 'user_id', how = 'left')
-df = df.merge(user_stream, on = ['user_id','time_window'], how = 'left')
-
-df[df.filter(like='_ratio').columns] = df.filter(like='_ratio').fillna(0)
-
-df = df.dropna().copy()
-
-
-
-
-df = df[(df.is_own_profile == True)].dropna(subset=["rating"])
-df.reset_index(inplace = True, drop = True)
-
-df.rename(columns=lambda x: x.replace("_ratio", "") if "_ratio" in x else x, inplace=True)
-
-#get long term consumption for covariates 
-df_prop = pd.read_csv('../../../data/nfs/analysis/bmassonisguerra/rec_llm/propensity.csv')
 df_prop = df_prop[['user_id','Electronic_ratio', 'Metal_ratio', 'Rock_ratio', 'Jazz_ratio','World_ratio','Rap_ratio']].copy()
 
-
 temp = df[['user_id','delta_rating','model',
-           'gs_score','age','Electronic', 
-           'Metal', 'Rock', 'United States of America', 'United Kingdom', 'Canada', 'Jazz', 'France',
+           'gs_score','Electronic', 
+           'Metal', 'Rock', 'US', 'UK', 'Canada', 'Jazz', 'France',
            'Belgium', 'World', 'Rap',
            'genre_entropy','genre_none', 'country_entropy', 'country_none']].copy()
 
 temp = temp.merge(df_prop, on = 'user_id')
-temp['US'] = temp['United States of America']
-temp['UK'] = temp['United Kingdom']
+
 
 temp = temp.dropna()
 
@@ -87,7 +48,7 @@ def doubly_robust(df, X, t, Y):
     
     return ate
 
-covariates = ['gs_score','age','Electronic', 
+covariates = ['gs_score','Electronic', 
               'Metal', 'Rock', 'US', 'UK', 'Canada', 'Jazz', 'France',
               'Belgium', 'World', 'Rap', 
               'genre_entropy','genre_none', 'country_entropy', 'country_none',
@@ -108,7 +69,7 @@ for param in tqdm(['Metal', 'Rock', 'US', 'UK', 'Canada', 'Jazz', 'France',
         data = temp[temp.model == model].copy()
         print(model)
         ates = []
-        for i in range(1000):
+        for i in range(10):#1000 times in the paper
             ates.append(doubly_robust(data.sample(frac=1, replace=True), X, param,'delta_rating'))
         print(f"ATE 95% CI:", (np.percentile(ates, 2.5), np.percentile(ates, 97.5)))
        
@@ -127,5 +88,3 @@ for param in tqdm(['Metal', 'Rock', 'US', 'UK', 'Canada', 'Jazz', 'France',
         })
 
 df_ate =  pd.DataFrame(results)
-
-df_ate.to_csv('dobly_robustCR.csv', index=False)
