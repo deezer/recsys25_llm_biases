@@ -12,9 +12,10 @@ Please cite our paper if you use this code in your own work:
   year={2025}
 }
 ```
-
 ## Dataset
-We will release our proprietary data upon acceptance, ensuring anonymity.
+The `data` folder contains the following files:  
+- **`user_data.csv`**: user profiles and ratings  
+- **`long_term.csv`**: long-term preferences, used for computing the ATE with Doubly Robust  
 
 ## Quickstart
 
